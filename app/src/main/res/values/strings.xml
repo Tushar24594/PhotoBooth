@@ -4,4 +4,7 @@
     <string name="preview_description">Image and Video preview will appear here</string>
     <string name="btn_take_picture">Take Picture</string>
     <string name="btn_record_video">Record Video</string>
+    <string name="permission_required">Permission Required</string>
+    <string name="permission_message">You must grant permission to access camera and external storage to run this application.</string>
+    <string name="permission_warning">All permissions are required.</string>
 </resources>

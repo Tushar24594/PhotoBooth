@@ -35,7 +35,7 @@ public class startScreen extends AppCompatActivity {
                     public void run() {
                         imageButton.setScaleX((float) 1.0);
                         imageButton.setScaleY((float) 1.0);
-                        Intent intent = new Intent(getApplicationContext(), MainActivity.class);
+                        Intent intent = new Intent(getApplicationContext(), CameraScreen.class);
                         startActivity(intent);
                         finish();
                     }

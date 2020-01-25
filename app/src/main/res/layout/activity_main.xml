@@ -27,7 +27,7 @@
            android:id="@+id/nameTxt"
            android:layout_width="wrap_content"
            android:layout_height="wrap_content"
-           android:text="FullName"
+           android:text="Full Name"
            android:textSize="20sp"
            android:textColor="#000000"
            android:layout_marginBottom="20sp"/>

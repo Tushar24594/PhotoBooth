@@ -64,7 +64,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void sendMail(){
-        
+
     }
 
     @Override
