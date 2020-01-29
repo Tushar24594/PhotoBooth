@@ -107,7 +107,7 @@ public class CaptureScreen extends AppCompatActivity {
         Bitmap result = Bitmap.createBitmap(secondImage.getWidth(), secondImage.getHeight(), secondImage.getConfig());
         Log.e(TAG, String.valueOf(secondImage.getConfig()));
         Canvas canvas = new Canvas(result);
-        canvas.drawBitmap(firstImage, -150, -30,null);
+        canvas.drawBitmap(firstImage, -250, -30,null);
         canvas.drawBitmap(secondImage, 0,0, null);
         Log.w(TAG,"C H: "+canvas.getHeight()+"C W :"+canvas.getWidth() );
         return result;
@@ -119,7 +119,7 @@ public class CaptureScreen extends AppCompatActivity {
         myDir.mkdirs();
 
         String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
-        String fname = "Shutta_"+ timeStamp +".jpg";
+        String fname = "PhotoBoxi_"+ timeStamp +".jpg";
 
         File file = new File(myDir, fname);
         if (file.exists()) file.delete ();

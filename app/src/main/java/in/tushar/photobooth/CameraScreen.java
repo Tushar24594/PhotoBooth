@@ -4,6 +4,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 
+import android.Manifest;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -13,12 +14,15 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Matrix;
+import android.graphics.Typeface;
+import android.hardware.Camera.Parameters;
 import android.media.ExifInterface;
 import android.media.MediaPlayer;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.hardware.Camera;
+import android.os.CountDownTimer;
 import android.os.Environment;
 import android.os.Handler;
 import android.util.Log;
@@ -29,6 +33,7 @@ import android.view.Window;
 import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.ImageButton;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import java.io.ByteArrayOutputStream;
@@ -37,7 +42,9 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.security.Policy;
 import java.util.ArrayList;
+import java.util.List;
 
 import static android.Manifest.permission.CAMERA;
 import static android.Manifest.permission.WRITE_EXTERNAL_STORAGE;
@@ -50,10 +57,15 @@ public class CameraScreen extends AppCompatActivity implements SurfaceHolder.Cal
     public static final int REQUEST_CODE = 100;
     private SurfaceHolder surfaceHolder;
     private SurfaceView surfaceView;
+    Typeface bold, regular;
     private Camera camera;
     private String[] neededPermissions = new String[]{CAMERA, WRITE_EXTERNAL_STORAGE};
     boolean result;
     MediaPlayer mediaPlayer;
+    Integer time = 3;
+    TextView timer;
+    private Camera.Size mPreviewSize;
+    private List<Camera.Size> mSupportedPreviewSizes;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -62,10 +74,18 @@ public class CameraScreen extends AppCompatActivity implements SurfaceHolder.Cal
                 WindowManager.LayoutParams.FLAG_FULLSCREEN);
         setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
         setContentView(R.layout.activity_camera);
+        bold = Typeface.createFromAsset(getAssets(), "font/Teko-Bold.ttf");
+        regular = Typeface.createFromAsset(getAssets(), "font/Teko-Medium.ttf");
         surfaceView = findViewById(R.id.surfaceView);
+        timer = findViewById(R.id.timer);
+        timer.setTypeface(regular);
         mediaPlayer = MediaPlayer.create(getApplicationContext(), R.raw.beep);
         if (surfaceView != null) {
             result = checkPermission();
+            int permissionCheck = ContextCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE);
+            if (permissionCheck != PackageManager.PERMISSION_GRANTED) {
+                ActivityCompat.requestPermissions(CameraScreen.this, new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, 3);
+            }
             if (result) setupSurfaceHolder();
         }
     }
@@ -135,14 +155,32 @@ public class CameraScreen extends AppCompatActivity implements SurfaceHolder.Cal
             startBtn.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    startBtn.setScaleX((float)0.9);
-                    startBtn.setScaleY((float)0.9);
+                    startBtn.setScaleX((float) 0.9);
+                    startBtn.setScaleY((float) 0.9);
                     new Handler().postDelayed(new Runnable() {
                         @Override
                         public void run() {
                             startBtn.setScaleX((float) 1.0);
                             startBtn.setScaleY((float) 1.0);
-                            captureImage();
+                            Log.e(TAG, "Timer : " + time);
+                            timer.setVisibility(View.VISIBLE);
+                            new CountDownTimer(3000, 1000) {
+
+                                public void onTick(long millisUntilFinished) {
+                                    timer.setText(String.valueOf(time));
+                                    time--;
+                                }
+
+                                public void onFinish() {
+                                    timer.setVisibility(View.GONE);
+                                }
+                            }.start();
+                            new Handler().postDelayed(new Runnable() {
+                                @Override
+                                public void run() {
+                                    captureImage();
+                                }
+                            }, 3000);
                         }
                     }, 300);
 
@@ -156,6 +194,8 @@ public class CameraScreen extends AppCompatActivity implements SurfaceHolder.Cal
             camera.takePicture(null, null, this);
             mediaPlayer.start();
         }
+
+
     }
 
     @Override
@@ -164,6 +204,7 @@ public class CameraScreen extends AppCompatActivity implements SurfaceHolder.Cal
     }
 
     private void startCamera() {
+
         try {
             int cameraCount = 0;
             Camera.CameraInfo cameraInfo = new Camera.CameraInfo();
@@ -173,12 +214,26 @@ public class CameraScreen extends AppCompatActivity implements SurfaceHolder.Cal
                 if (cameraInfo.facing == Camera.CameraInfo.CAMERA_FACING_FRONT) {
                     try {
                         camera = Camera.open(camIdx);
+                        camera.setAutoFocusMoveCallback(null);
                         camera.setDisplayOrientation(90);
+                        mSupportedPreviewSizes = camera.getParameters().getSupportedPreviewSizes();
+                        for(Camera.Size str: mSupportedPreviewSizes)
+                            Log.e(TAG, "Size--"+str.width + "/" + str.height);
+                        Camera.Parameters parameters = camera.getParameters();
+                        parameters.setPreviewSize(mPreviewSize.width, mPreviewSize.height);
+                        camera.setParameters(parameters);
+                        camera.setDisplayOrientation(90);
+                        camera.setPreviewDisplay(surfaceHolder);
+                        camera.startPreview();
                     } catch (RuntimeException e) {
                         Log.e(TAG, "Failed to open: " + e.getLocalizedMessage());
                     }
                 }
             }
+//            Camera.Parameters parameters = camera.getParameters();
+//            parameters.setPreviewSize(mPreviewSize.width,mPreviewSize.height);
+//            camera.setParameters(parameters);
+//            camera.setDisplayOrientation(90);
             camera.setPreviewDisplay(surfaceHolder);
             camera.startPreview();
         } catch (IOException e) {
