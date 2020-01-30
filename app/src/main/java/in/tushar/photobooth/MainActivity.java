@@ -22,6 +22,7 @@ import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -52,6 +53,8 @@ public class MainActivity extends AppCompatActivity {
     CSV csv = new CSV();
     Boolean saved = false;
     String mailStatus;
+    ProgressBar progressBar;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -71,8 +74,10 @@ public class MainActivity extends AppCompatActivity {
         innerLayout = findViewById(R.id.innerLayout);
         sent = findViewById(R.id.sentPopUp);
         sent.setVisibility(View.GONE);
-        bold = Typeface.createFromAsset(getAssets(), "font/Teko-Bold.ttf");
-        regular = Typeface.createFromAsset(getAssets(), "font/Teko-Medium.ttf");
+        bold = Typeface.createFromAsset(getAssets(), "font/RENAULTLIFE-BOLD.TTF");
+        regular = Typeface.createFromAsset(getAssets(), "font/RENAULTLIFE-REGULAR.TTF");
+        progressBar = findViewById(R.id.progressBar);
+        progressBar.setVisibility(View.GONE);
         nameTxt = findViewById(R.id.nameTxt);
         phoneTxt = findViewById(R.id.phoneTxt);
         emailTxt = findViewById(R.id.emailTxt);
@@ -102,18 +107,27 @@ public class MainActivity extends AppCompatActivity {
                         if (userName.isEmpty()) {
                             nameEditTxt.setError("Please enter your name");
                             nameEditTxt.requestFocus();
+                            return;
                         } else if (userMobile.isEmpty() || userMobile.length() < 10) {
                             phoneEditTxt.setError("Please enter your phone number");
                             phoneEditTxt.requestFocus();
+                            return;
                         } else if (userEmail.isEmpty() || !userEmail.matches(emailPattern)) {
                             emailEditTxt.setError("Please enter your email");
                             emailEditTxt.requestFocus();
+                            return;
                         } else if (!userEmail.isEmpty() || !userName.isEmpty() || !userMobile.isEmpty()) {
                             InputMethodManager inputManager = (InputMethodManager) getApplicationContext().getSystemService(Context.INPUT_METHOD_SERVICE);
                             inputManager.toggleSoftInput(InputMethodManager.HIDE_IMPLICIT_ONLY, 0);
                             innerLayout.setAlpha((float) 0.1);
-                            sent.setVisibility(View.VISIBLE);
-                            dataSaved();
+                            progressBar.setVisibility(View.VISIBLE);
+                            new Handler().postDelayed(new Runnable() {
+                                @Override
+                                public void run() {
+                                    Log.e(TAG, " Database Sending>>>>>>>>");
+                                    dataSaved();
+                                }
+                            }, 600);
                         }
                     }
                 }, 300);
@@ -123,14 +137,16 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 
-    public void dataSaved(){
+    public void dataSaved() {
         saved = csv.saveDatatoCSV(userName, userMobile, userEmail);
-        if(saved){
-            Log.e(TAG," Database Saved..."+saved);
+        if (saved) {
+            Log.e(TAG, " Database Saved..." + saved);
             try {
                 mailStatus = String.valueOf(mail.sendComplexMessage(image, userEmail));
                 Log.e(TAG, "Return : " + mailStatus);
-                if (!mailStatus.isEmpty()) {
+                progressBar.setVisibility(View.GONE);
+                sent.setVisibility(View.VISIBLE);
+                if (!mailStatus.isEmpty() || mailStatus != null) {
                     Log.e(TAG, "Sent....");
                     new Handler().postDelayed(new Runnable() {
                         @Override
@@ -146,8 +162,8 @@ public class MainActivity extends AppCompatActivity {
             } catch (UnirestException e) {
                 e.printStackTrace();
             }
-        }else{
-            Log.e(TAG," Database Not Saved..."+saved);
+        } else {
+            Log.e(TAG, " Database Not Saved..." + saved);
         }
     }
 

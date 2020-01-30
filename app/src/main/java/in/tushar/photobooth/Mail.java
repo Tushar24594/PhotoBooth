@@ -11,13 +11,17 @@ import com.mashape.unirest.http.JsonNode;
 import com.mashape.unirest.http.Unirest;
 import com.mashape.unirest.http.exceptions.UnirestException;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.io.File;
 
 import static in.tushar.photobooth.MainActivity.TAG;
 
 public class Mail {
     private static final String YOUR_DOMAIN_NAME = "cokeunboxchristmas.com";
-    private static final String API_KEY = "key-dfd71076a70e3243ca628f8a223ebadb";
+    // private static final String API_KEY = "key-dfd71076a70e3243ca628f8a223ebadb";
+   private static final String API_KEY = "apikey";
 
     public JsonNode sendComplexMessage(String ImageName, String email) throws UnirestException {
         Log.e(TAG,"_MAIL_Sending............");
@@ -34,11 +38,18 @@ public class Mail {
                     .field("html", "<p>Hi,</p>\n<p>Thank you for visiting Renault Stall at Autoexpo 2020.</p>\n<p>Here is your cool selfie at Renault Photobooth Station.</p>\n<br><p>Thanks and Regards Renault</p>")
                     .field("attachment", new File(String.valueOf(image)))
                     .asJson();
+//            jsonObject.put("json",request.getCode());
             Log.e(TAG, " HTTP : " + request.getBody());
-            Log.e(TAG, " Headers : " + request.getHeaders());
+            Log.e(TAG, " Headers : " + request.getCode());
         } catch (Exception e) {
             Log.e(TAG, "EXception in mailling Function " + e);
+
         }
-        return request.getBody();
+
+        if(request.getCode()!=200){
+            return null;
+        }else{
+            return request.getBody();
+        }
     }
 }

@@ -16,7 +16,7 @@
 
         <SurfaceView
             android:id="@+id/surfaceView"
-            android:layout_width="720sp"
+            android:layout_width="712sp"
             android:layout_height="1280sp"
             android:background="@drawable/cam"
             android:visibility="gone" />

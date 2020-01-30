@@ -66,6 +66,7 @@ public class CameraScreen extends AppCompatActivity implements SurfaceHolder.Cal
     TextView timer;
     private Camera.Size mPreviewSize;
     private List<Camera.Size> mSupportedPreviewSizes;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -173,6 +174,8 @@ public class CameraScreen extends AppCompatActivity implements SurfaceHolder.Cal
 
                                 public void onFinish() {
                                     timer.setVisibility(View.GONE);
+                                    timer.setText(String.valueOf(3));
+                                    time = 3;
                                 }
                             }.start();
                             new Handler().postDelayed(new Runnable() {
@@ -191,8 +194,11 @@ public class CameraScreen extends AppCompatActivity implements SurfaceHolder.Cal
 
     public void captureImage() {
         if (camera != null) {
+            Log.e(TAG, "Camera taking picture.....");
             camera.takePicture(null, null, this);
             mediaPlayer.start();
+        } else {
+            Log.e(TAG, "Camera Cannot taking picture.....");
         }
 
 
@@ -217,8 +223,8 @@ public class CameraScreen extends AppCompatActivity implements SurfaceHolder.Cal
                         camera.setAutoFocusMoveCallback(null);
                         camera.setDisplayOrientation(90);
                         mSupportedPreviewSizes = camera.getParameters().getSupportedPreviewSizes();
-                        for(Camera.Size str: mSupportedPreviewSizes)
-                            Log.e(TAG, "Size--"+str.width + "/" + str.height);
+                        for (Camera.Size str : mSupportedPreviewSizes)
+                            Log.e(TAG, "Size--" + str.width + "/" + str.height);
                         Camera.Parameters parameters = camera.getParameters();
                         parameters.setPreviewSize(mPreviewSize.width, mPreviewSize.height);
                         camera.setParameters(parameters);
@@ -293,8 +299,12 @@ public class CameraScreen extends AppCompatActivity implements SurfaceHolder.Cal
     private void saveImage(byte[] bytes) {
         FileOutputStream outStream;
         try {
+            String root = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DCIM).toString();
+            File myDir = new File(root + "/PhotoBooth");
+            myDir.mkdirs();
             String fileName = "Image_" + System.currentTimeMillis() + ".PNG";
             File file = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DCIM), "/PhotoBooth/" + fileName);
+
             outStream = new FileOutputStream(file);
             outStream.write(bytes);
             outStream.close();

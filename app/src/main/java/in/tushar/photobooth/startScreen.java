@@ -4,6 +4,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
+import android.graphics.Typeface;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
@@ -11,11 +12,14 @@ import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.ImageButton;
+import android.widget.TextView;
 import android.widget.Toast;
 
 public class startScreen extends AppCompatActivity {
     boolean doubleBackToExitPressedOnce = false;
     ImageButton imageButton;
+    TextView txt;
+    Typeface bold, regular;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -25,6 +29,10 @@ public class startScreen extends AppCompatActivity {
                 WindowManager.LayoutParams.FLAG_FULLSCREEN);
         setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
         setContentView(R.layout.activity_start_screen);
+        bold = Typeface.createFromAsset(getAssets(), "font/RENAULTLIFE-BOLD.TTF");
+        regular = Typeface.createFromAsset(getAssets(), "font/RENAULTLIFE-REGULAR.TTF");
+        txt = findViewById(R.id.txt);
+        txt.setTypeface(bold);
         imageButton = findViewById(R.id.start);
         imageButton.setOnClickListener(new View.OnClickListener() {
             @Override
