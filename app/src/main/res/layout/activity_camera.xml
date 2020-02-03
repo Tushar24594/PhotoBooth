@@ -18,16 +18,19 @@
             android:id="@+id/surfaceView"
             android:layout_width="712sp"
             android:layout_height="1280sp"
-            android:background="@drawable/cam"
+            android:background="@color/tranparent"
             android:visibility="gone" />
-
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@drawable/cam"/>
         <TextView
             android:id="@+id/timer"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center_vertical|center_horizontal"
             android:text="3"
-            android:textColor="#D6C7AA"
+            android:textColor="#FFFFFF"
             android:textSize="4in"
             android:visibility="gone"/>
 
@@ -36,7 +39,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center_horizontal|bottom"
-            android:layout_marginBottom="0.5in"
+            android:layout_marginBottom="1.7in"
             android:background="@color/tranparent"
             android:src="@drawable/click" />
 

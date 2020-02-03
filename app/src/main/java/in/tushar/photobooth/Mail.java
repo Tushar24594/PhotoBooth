@@ -19,9 +19,9 @@ import java.io.File;
 import static in.tushar.photobooth.MainActivity.TAG;
 
 public class Mail {
-    private static final String YOUR_DOMAIN_NAME = "cokeunboxchristmas.com";
-    // private static final String API_KEY = "key-dfd71076a70e3243ca628f8a223ebadb";
-   private static final String API_KEY = "apikey";
+    private static final String YOUR_DOMAIN_NAME = "renaultautoexpo2020.com";
+     private static final String API_KEY = "key-dfd71076a70e3243ca628f8a223ebadb";
+//   private static final String API_KEY = "apikey";
 
     public JsonNode sendComplexMessage(String ImageName, String email) throws UnirestException {
         Log.e(TAG,"_MAIL_Sending............");
@@ -31,7 +31,7 @@ public class Mail {
             Log.e(TAG, "File : " + image);
             request = Unirest.post("https://api.mailgun.net/v3/" + YOUR_DOMAIN_NAME + "/messages")
                     .basicAuth("api", API_KEY)
-                    .field("from", "Taggalabs.in<info@" + YOUR_DOMAIN_NAME + ">")
+                    .field("from", "Renault<Autoexpo2020@" + YOUR_DOMAIN_NAME + ">")
                     .field("to", email)
                     .field("subject", "Renault AutoExpo 2020")
 //                    .field("text", "Testing out some Mailgun awesomeness!")

@@ -74,8 +74,8 @@ public class MainActivity extends AppCompatActivity {
         innerLayout = findViewById(R.id.innerLayout);
         sent = findViewById(R.id.sentPopUp);
         sent.setVisibility(View.GONE);
-        bold = Typeface.createFromAsset(getAssets(), "font/RENAULTLIFE-BOLD.TTF");
-        regular = Typeface.createFromAsset(getAssets(), "font/RENAULTLIFE-REGULAR.TTF");
+        bold = Typeface.createFromAsset(getAssets(), "fonts/RENAULTLIFE-BOLD.TTF");
+        regular = Typeface.createFromAsset(getAssets(), "fonts/RENAULTLIFE-REGULAR.TTF");
         progressBar = findViewById(R.id.progressBar);
         progressBar.setVisibility(View.GONE);
         nameTxt = findViewById(R.id.nameTxt);

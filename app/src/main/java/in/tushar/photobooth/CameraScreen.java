@@ -75,11 +75,11 @@ public class CameraScreen extends AppCompatActivity implements SurfaceHolder.Cal
                 WindowManager.LayoutParams.FLAG_FULLSCREEN);
         setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
         setContentView(R.layout.activity_camera);
-        bold = Typeface.createFromAsset(getAssets(), "font/Teko-Bold.ttf");
-        regular = Typeface.createFromAsset(getAssets(), "font/Teko-Medium.ttf");
+        bold = Typeface.createFromAsset(getAssets(), "fonts/RENAULTLIFE-BOLD.TTF");
+        regular = Typeface.createFromAsset(getAssets(), "fonts/RENAULTLIFE-REGULAR.TTF");
         surfaceView = findViewById(R.id.surfaceView);
         timer = findViewById(R.id.timer);
-        timer.setTypeface(regular);
+        timer.setTypeface(bold);
         mediaPlayer = MediaPlayer.create(getApplicationContext(), R.raw.beep);
         if (surfaceView != null) {
             result = checkPermission();

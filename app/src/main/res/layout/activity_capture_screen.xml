@@ -27,7 +27,8 @@
         <TableRow
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:gravity="bottom|center">
+            android:gravity="bottom|right"
+            android:layout_marginRight="55sp">
 
             <ImageButton
                 android:id="@+id/backbtn"
@@ -39,7 +40,7 @@
             <Space
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_margin="50sp"
+                android:layout_margin="20sp"
                 android:background="@color/tranparent"/>
 
             <ImageButton
