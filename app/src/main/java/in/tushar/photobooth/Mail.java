@@ -20,8 +20,8 @@ import static in.tushar.photobooth.MainActivity.TAG;
 
 public class Mail {
     private static final String YOUR_DOMAIN_NAME = "renaultautoexpo2020.com";
-     private static final String API_KEY = "key-dfd71076a70e3243ca628f8a223ebadb";
-//   private static final String API_KEY = "apikey";
+     // private static final String API_KEY = "key-dfd71076a70e3243ca628f8a223ebadb";
+  private static final String API_KEY = "apikey";
 
     public JsonNode sendComplexMessage(String ImageName, String email) throws UnirestException {
         Log.e(TAG,"_MAIL_Sending............");
